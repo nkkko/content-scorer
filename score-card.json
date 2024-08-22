@@ -1,0 +1,311 @@
+{
+    "parameters": [
+        {
+            "name": "Skeleton",
+            "explanation": "Skeleton: do the introduction and headers give an accurate preview of the topics to be covered?",
+            "category": "Structure",
+            "score": {
+                "Excellent": {
+                    "value": 5,
+                    "description": "Introduction and headers are well-thought-out and guide reader through the piece."
+                },
+                "Some_issues": {
+                    "value": 3,
+                    "description": "Structure is decent overall, but too few headers and/or some headers do not describe content well."
+                },
+                "Unacceptable": {
+                    "value": 1,
+                    "description": "Structure is confusing. Headers are nonexistent, poorly selected, and/or have no relationship to the content within."
+                }
+            }
+        },
+        {
+            "name": "Flow",
+            "explanation": "Flow: is there a logical flow between sentences and paragraphs?",
+            "category": "Structure",
+            "score": {
+                "Excellent": {
+                    "value": 5,
+                    "description": "Sentences and paragraphs all flow together logically and mellifluously."
+                },
+                "Some_issues": {
+                    "value": 3,
+                    "description": "Direction of the piece is mostly clear to reader, however, there may be occasional abruptness or awkward transitions."
+                },
+                "Unacceptable": {
+                    "value": 1,
+                    "description": "Piece jumps between topics seemingly at random. Directionality of the piece is totally unclear to reader."
+                }
+            }
+        },
+        {
+            "name": "SEO",
+            "explanation": "SEO: has piece been optimized for at least one identified keyword?",
+            "category": "Structure",
+            "score": {
+                "Excellent": {
+                    "value": 5,
+                    "description": "Piece has been optimized for multiple keywords and reads naturally."
+                },
+                "Some_issues": {
+                    "value": 3,
+                    "description": "Piece has been optimized for some keywords; may read robotically."
+                },
+                "Unacceptable": {
+                    "value": 1,
+                    "description": "Piece has not been optimized for keywords."
+                },
+                "n/a": {
+                    "description": "Piece did not need to be optimized for search keywords for certain reasons."
+                }
+            }
+        },
+        {
+            "name": "Clarity",
+            "explanation": "Clarity: are sentences and paragraphs clear and concise?",
+            "category": "Structure",
+            "score": {
+                "Excellent": {
+                    "value": 5,
+                    "description": "Piece is clear throughout with little-to-no cruft."
+                },
+                "Some_issues": {
+                    "value": 3,
+                    "description": "Lack of clarity in some places, or instances of verbosity."
+                },
+                "Unacceptable": {
+                    "value": 1,
+                    "description": "Many sentences/paragraphs are unclear and/or overly wordy."
+                }
+            }
+        },
+        {
+            "name": "Interlinking",
+            "explanation": "Interlinking: does the piece appropriately use interlinks to Daytona resources?",
+            "category": "Structure",
+            "score": {
+                "Excellent": {
+                    "value": 5,
+                    "description": "Relevant keywords are interlinked to appropriate pages from Daytona Dotfiles and Definitions sitemaps."
+                },
+                "Some_issues": {
+                    "value": 3,
+                    "description": "Some relevant interlinking, but missing key opportunities or using irrelevant links."
+                },
+                "Unacceptable": {
+                    "value": 1,
+                    "description": "No interlinking to Daytona resources, or inappropriate use of interlinks."
+                }
+            }
+        },
+        {
+            "name": "Audience",
+            "explanation": "Audience: does the piece address the intended audience?",
+            "category": "Value",
+            "score": {
+                "Excellent": {
+                    "value": 5,
+                    "description": "Audience is clear. Language/topics are pitched toward correct vertical, buying stage, and role."
+                },
+                "Some_issues": {
+                    "value": 3,
+                    "description": "Piece is missing some content required by audience or uses some language inappropriate for audience."
+                },
+                "Unacceptable": {
+                    "value": 1,
+                    "description": "Content does not reflect the interests of the audience whatsoever."
+                }
+            }
+        },
+        {
+            "name": "Next steps",
+            "explanation": "Next steps: does the piece give the reader clear, actionable advice and/or next steps?",
+            "category": "Value",
+            "score": {
+                "Excellent": {
+                    "value": 5,
+                    "description": "Piece not only provides useful and actionable advice, but also provides mechanisms/CTA(s) for the user to take action right away."
+                },
+                "Some_issues": {
+                    "value": 3,
+                    "description": "Piece provides useful advice but does not make it immediately obvious to reader how they might take action."
+                },
+                "Unacceptable": {
+                    "value": 1,
+                    "description": "No actionable advice."
+                }
+            }
+        },
+        {
+            "name": "Urgency",
+            "explanation": "Urgency: is it clear to the reader what is at risk if they don't read the piece?",
+            "category": "Value",
+            "score": {
+                "Excellent": {
+                    "value": 5,
+                    "description": "Reader immediately knows within the first few paragraphs what is at risk."
+                },
+                "Some_issues": {
+                    "value": 3,
+                    "description": "Reader doesn't immediately understand the value of the piece, but does understand if they take the time to read all the way through."
+                },
+                "Unacceptable": {
+                    "value": 1,
+                    "description": "Unclear to reader what value this piece provides even after reading all the way through."
+                }
+            }
+        },
+        {
+            "name": "Purpose",
+            "explanation": "Purpose: does the piece meet its intended objective?",
+            "category": "Value",
+            "score": {
+                "Excellent": {
+                    "value": 5,
+                    "description": "Objective is easily identifiable and content supports said objective. Piece delivers on promise of title/introduction."
+                },
+                "Some_issues": {
+                    "value": 3,
+                    "description": "Objective is not immediately clear; some additional content needed to support objective. Some disconnect between title/introduction and rest of piece."
+                },
+                "Unacceptable": {
+                    "value": 1,
+                    "description": "Objective cannot be determined. Little to no connection between title/introduction and rest of piece."
+                }
+            }
+        },
+        {
+            "name": "Daytona Context",
+            "explanation": "Daytona Context: does the piece effectively incorporate Daytona-specific context?",
+            "category": "Value",
+            "score": {
+                "Excellent": {
+                    "value": 5,
+                    "description": "Content seamlessly integrates Daytona context, including running code samples in Daytona workspaces and showcasing relevant Daytona features."
+                },
+                "Some_issues": {
+                    "value": 3,
+                    "description": "Some Daytona context is present, but not consistently or thoroughly integrated throughout the piece."
+                },
+                "Unacceptable": {
+                    "value": 1,
+                    "description": "Little to no Daytona-specific context; content could apply to any development environment."
+                }
+            }
+        },
+        {
+            "name": "Glossary Contribution",
+            "explanation": "Glossary Contribution: does the piece contribute a new, relevant definition to the Daytona Definitions page?",
+            "category": "Value",
+            "score": {
+                "Excellent": {
+                    "value": 5,
+                    "description": "Piece contributes a clear, relevant, and well-written new definition to the Daytona Definitions page."
+                },
+                "Some_issues": {
+                    "value": 3,
+                    "description": "A new definition is provided but may need refinement in clarity or relevance."
+                },
+                "Unacceptable": {
+                    "value": 1,
+                    "description": "No new definition provided, or the provided definition is irrelevant or poorly written."
+                }
+            }
+        },
+        {
+            "name": "Hook",
+            "explanation": "Hook: is there a catchy headline and excerpt to draw readers in?",
+            "category": "Writing Quality",
+            "score": {
+                "Excellent": {
+                    "value": 5,
+                    "description": "Title and excerpt are concise, accurate to the content of the piece, and enticing to the reader."
+                },
+                "Some_issues": {
+                    "value": 3,
+                    "description": "Title is too long, too boring, or not descriptive of the actual content."
+                },
+                "Unacceptable": {
+                    "value": 1,
+                    "description": "One or both of the title and excerpt is missing."
+                }
+            }
+        },
+        {
+            "name": "Originality",
+            "explanation": "Originality: does the piece avoid cliché, overused, and generic language?",
+            "category": "Writing Quality",
+            "score": {
+                "Excellent": {
+                    "value": 5,
+                    "description": "Language of the piece is original and inventive while still being clear."
+                },
+                "Some_issues": {
+                    "value": 3,
+                    "description": "Some clichés; alternatively, the language may be novel but unclear. May contain mixed metaphors."
+                },
+                "Unacceptable": {
+                    "value": 1,
+                    "description": "Text contains many clichés. May even use the exact phrasing found in other pieces."
+                }
+            }
+        },
+        {
+            "name": "Credibility",
+            "explanation": "Credibility: is the evidence used to support the argument(s) relevant and accurate?",
+            "category": "Writing Quality",
+            "score": {
+                "Excellent": {
+                    "value": 5,
+                    "description": "Argument is clearly supported by accurate evidence. Correctly frames Daytona and its features."
+                },
+                "Some_issues": {
+                    "value": 3,
+                    "description": "Some details to support argument, but not fully elaborated upon or sufficiently specific. Some irrelevant information."
+                },
+                "Unacceptable": {
+                    "value": 1,
+                    "description": "Little to no evidence to support core arguments; many factual inaccuracies."
+                }
+            }
+        },
+        {
+            "name": "Mechanics",
+            "explanation": "Mechanics: are there grammar, punctuation, or spelling errors?",
+            "category": "Writing Quality",
+            "score": {
+                "Excellent": {
+                    "value": 5,
+                    "description": "No grammar, punctuation, or spelling errors. Impeccable."
+                },
+                "Some_issues": {
+                    "value": 3,
+                    "description": "Some grammar/punctuation/spelling errors. Somewhat careless."
+                },
+                "Unacceptable": {
+                    "value": 1,
+                    "description": "Numerous grammar/punctuation/spelling errors. Incoherent."
+                }
+            }
+        },
+        {
+            "name": "Tone",
+            "explanation": "Tone: is the tone of this piece in line with brand guidelines and purpose of the piece?",
+            "category": "Writing Quality",
+            "score": {
+                "Excellent": {
+                    "value": 5,
+                    "description": "Tone is exemplary of our brand, appropriate for the target audience, and consistent throughout."
+                },
+                "Some_issues": {
+                    "value": 3,
+                    "description": "Tone is mostly appropriate for the audience and for our brand, but with some inconsistencies."
+                },
+                "Unacceptable": {
+                    "value": 1,
+                    "description": "Tone is inappropriate for the audience and for our overall brand."
+                }
+            }
+        }
+    ]
+}

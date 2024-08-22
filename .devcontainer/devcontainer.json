@@ -1,0 +1,37 @@
+{
+    "name": "AI PR Review Environment",
+    "image": "mcr.microsoft.com/devcontainers/python:3.9",
+    "features": {
+        "ghcr.io/devcontainers/features/github-cli:1": {}
+    },
+    "postCreateCommand": "pip install --user -r requirements.txt",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-azuretools.vscode-docker",
+                "GitHub.vscode-pull-request-github",
+                "redhat.vscode-yaml",
+                "yzhang.markdown-all-in-one",
+                "streetsidesoftware.code-spell-checker"
+            ],
+            "settings": {
+                "python.defaultInterpreterPath": "/usr/local/bin/python",
+                "python.linting.enabled": true,
+                "python.linting.pylintEnabled": true,
+                "python.formatting.autopep8Path": "/usr/local/py-utils/bin/autopep8",
+                "python.formatting.blackPath": "/usr/local/py-utils/bin/black",
+                "python.formatting.yapfPath": "/usr/local/py-utils/bin/yapf",
+                "python.linting.banditPath": "/usr/local/py-utils/bin/bandit",
+                "python.linting.flake8Path": "/usr/local/py-utils/bin/flake8",
+                "python.linting.mypyPath": "/usr/local/py-utils/bin/mypy",
+                "python.linting.pycodestylePath": "/usr/local/py-utils/bin/pycodestyle",
+                "python.linting.pydocstylePath": "/usr/local/py-utils/bin/pydocstyle"
+            }
+        }
+    },
+    "remoteUser": "vscode",
+    "forwardPorts": [],
+    "postStartCommand": "git config --global core.editor 'code --wait'"
+}

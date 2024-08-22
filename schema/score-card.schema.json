@@ -1,0 +1,89 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "parameters": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "explanation": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string",
+              "enum": ["Structure", "Value", "Writing Quality"]
+            },
+            "score": {
+              "type": "object",
+              "properties": {
+                "Excellent": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "integer",
+                      "enum": [5]
+                    },
+                    "description": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["value", "description"]
+                },
+                "Some_issues": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "integer",
+                      "enum": [3]
+                    },
+                    "description": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["value", "description"]
+                },
+                "Unacceptable": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "integer",
+                      "enum": [1]
+                    },
+                    "description": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["value", "description"]
+                },
+                "n/a": {
+                  "type": "object",
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["description"]
+                }
+              },
+              "required": ["Excellent", "Some_issues", "Unacceptable"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["name", "explanation", "category", "score"],
+          "additionalProperties": false
+        }
+      },
+      "summary": { "type": "string" },
+      "total_score": { "type": "integer" },
+      "recommendations": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "required": ["parameters", "summary", "total_score", "recommendations"],
+    "additionalProperties": false
+  }
