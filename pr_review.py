@@ -1,18 +1,15 @@
-"""
-This script performs an AI-powered review of GitHub pull requests.
-It fetches PR details, generates a review, and outputs the result.
-"""
-
+from typing import Optional, Dict, Any, List, Literal, Union
+from pydantic import BaseModel, Field, ValidationError
+import pydantic
 import os
 import json
 import logging
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List, Literal
 import requests
 from dotenv import load_dotenv
 from openai import AzureOpenAI
 import instructor
-from pydantic import BaseModel, Field, ValidationError, field_validator
-import pydantic  # Add this line
+from pydantic import BaseModel, Field, ValidationError
 import jsonschema
 import tiktoken
 import time
@@ -50,31 +47,60 @@ instructor_client = instructor.patch(azure_openai_client)
 
 # Define Pydantic models
 class ScoreValue(BaseModel):
-    value: Optional[int] = None
-    description: Optional[str] = None
+    value: Literal[1, 3, 5]
+    description: str
+
+class NAScore(BaseModel):
+    description: str
 
 class Score(BaseModel):
-    Excellent: Optional[ScoreValue] = None
-    Some_issues: Optional[ScoreValue] = None
-    Unacceptable: Optional[ScoreValue] = None
-    n_a: Optional[dict] = Field(None, alias='n/a')  # Change this line
+    Excellent: Optional[Union[ScoreValue, int]] = None
+    Some_issues: Optional[Union[ScoreValue, int]] = None
+    Unacceptable: Optional[Union[ScoreValue, int]] = None
+    n_a: Optional[NAScore] = Field(None, alias='n/a')
 
-    @field_validator('n_a', mode='before')
     @classmethod
-    def set_n_a_default(cls, v):
-        return v or {"description": "Not applicable"}
+    def __get_validators__(cls):
+        yield cls.validate_score
+
+    @classmethod
+    def validate_score(cls, v):
+        if isinstance(v, dict):
+            return cls(**v)
+        elif isinstance(v, int):
+            if v == 5:
+                return cls(Excellent=ScoreValue(value=5, description="Excellent"))
+            elif v == 3:
+                return cls(Some_issues=ScoreValue(value=3, description="Some issues"))
+            elif v == 1:
+                return cls(Unacceptable=ScoreValue(value=1, description="Unacceptable"))
+        raise ValueError(f"Invalid score value: {v}")
+
+    def get_value(self):
+        if self.Excellent:
+            return 5 if isinstance(self.Excellent, int) else self.Excellent.value
+        elif self.Some_issues:
+            return 3 if isinstance(self.Some_issues, int) else self.Some_issues.value
+        elif self.Unacceptable:
+            return 1 if isinstance(self.Unacceptable, int) else self.Unacceptable.value
+        return 0
 
 class Parameter(BaseModel):
     name: str
     explanation: str
-    category: str
-    score: Optional[Score] = None
+    category: Literal["Structure", "Value", "Writing Quality"]
+    score: Score
 
 class PRReview(BaseModel):
-    parameters: list[Parameter] = Field(description="List of parameters to evaluate the PR")
-    summary: str = Field(description="A brief summary of the changes in the PR")
-    total_score: int = Field(description="Total score of the PR review")
-    recommendations: list[str] = Field(description="List of recommendations for improving the PR")
+    parameters: List[Parameter] = Field(..., min_items=1)
+    summary: str = Field(..., min_length=1)
+    total_score: int = Field(..., ge=0)
+    recommendations: List[str] = Field(..., min_items=1)
+
+    def calculate_total_score(self):
+        total = sum(param.score.get_value() for param in self.parameters)
+        count = len(self.parameters)
+        return round(total / count) if count > 0 else 0
 
 def count_tokens(text: str) -> int:
     """Count the number of tokens in a given text."""
@@ -99,17 +125,7 @@ def get_pr_files(repo_full_name: str, pr_number: int) -> Dict[str, str]:
         if 'patch' in file:
             pr_files[filename] = file['patch']
         else:
-            # If 'patch' is not available, we'll use a placeholder
             pr_files[filename] = f"[File content not available for {filename}]"
-
-        # Optionally, you can add more file information
-        # pr_files[filename] = {
-        #     'patch': file.get('patch', '[Content not available]'),
-        #     'status': file['status'],
-        #     'additions': file['additions'],
-        #     'deletions': file['deletions'],
-        #     'changes': file['changes'],
-        # }
 
     return pr_files
 
@@ -133,49 +149,38 @@ def construct_review_prompt(pr_files: Dict[str, str], score_card: dict) -> str:
     return prompt
 
 def generate_pr_review(prompt: str) -> PRReview:
-    """Generate a pull request review using the AI model."""
+    """Generate a pull request review using the AI model and Instructor."""
     start_time = time.time()
     spinner = Halo(text='Generating PR review', spinner='dots')
     spinner.start()
 
     try:
-        response = instructor_client.chat.completions.create(
+        review = instructor_client.chat.completions.create(
             model="gpt-4o-mini",
             response_model=PRReview,
             messages=[
-                {"role": "system", "content": """
-                You are an AI assistant that reviews pull requests for the Daytona Content Programme.
-                Provide a review with parameters, summary, total_score, and recommendations.
-                For each parameter, provide a score with the following structure:
-                {
-                    "Excellent": {"value": 5, "description": "..."},
-                    "Some_issues": {"value": 3, "description": "..."},
-                    "Unacceptable": {"value": 1, "description": "..."},
-                    "n/a": {"description": "Not applicable"}
-                }
-                Choose the most appropriate score for each parameter and set the others to null.
-                If a parameter is not applicable, set "n/a" to {"description": "Not applicable"} and the others to null.
-                """},
+                {"role": "system", "content": "You are an AI assistant that reviews pull requests for the Daytona Content Programme."},
                 {"role": "user", "content": prompt}
             ],
             temperature=0
         )
+
+        # Calculate total score
+        review.total_score = review.calculate_total_score()
+
         elapsed_time = time.time() - start_time
         spinner.succeed(f"Successfully generated PR review in {elapsed_time:.2f} seconds")
-        print(f"Review: {response}")
-        return response
+        return review
     except instructor.exceptions.InstructorRetryException as e:
-        spinner.fail(f"Error generating PR review after retries: {str(e)}")
+        spinner.fail(f"Error generating PR review: {str(e)}")
+        logging.error(f"Full error: {e}")
+        logging.error(f"Last completion: {e.last_completion}")
         if hasattr(e, '__cause__') and isinstance(e.__cause__, pydantic.ValidationError):
-            print(f"Validation errors: {e.__cause__.errors()}")
-            print(f"Full error: {e.__cause__}")
-            # Try to access the raw response
-            if hasattr(e, 'response'):
-                print(f"Raw response: {e.response}")
+            logging.error(f"Validation errors: {e.__cause__.errors()}")
         raise
     except Exception as e:
-        spinner.fail(f"Unexpected error in generate_pr_review: {str(e)}")
-        print(f"Full error: {e}")
+        spinner.fail(f"Error generating PR review: {str(e)}")
+        logging.error(f"Full error: {e}")
         raise
     finally:
         spinner.stop()
@@ -185,10 +190,12 @@ def validate_review(review: PRReview, schema_path: str) -> bool:
     try:
         with open(schema_path, 'r') as schema_file:
             schema = json.load(schema_file)
-        jsonschema.validate(instance=review.dict(), schema=schema)
+        review_dict = review.dict()
+        logging.info(f"Review dict for validation: {json.dumps(review_dict, indent=2)}")
+        jsonschema.validate(instance=review_dict, schema=schema)
         return True
     except jsonschema.exceptions.ValidationError as e:
-        logging.error(f"Review validation failed: {e}")
+        logging.error(f"Review validation failed: {e.message}")
         logging.error(f"Failed validating {e.validator} in schema: {json.dumps(e.schema, indent=2)}")
         logging.error(f"On instance: {json.dumps(e.instance, indent=2)}")
         logging.error(f"Path of error: {' -> '.join(str(path) for path in e.path)}")
@@ -211,7 +218,6 @@ def format_review_comment(review: PRReview) -> str:
     return comment
 
 def main():
-    """Main function to orchestrate the PR review process."""
     try:
         print(f"Starting PR review for PR #{PR_NUMBER} in repository {REPO_FULL_NAME}")
 
@@ -228,12 +234,7 @@ def main():
             prompt = construct_review_prompt(pr_files, score_card)
             spinner.succeed("Constructed review prompt")
 
-        try:
-            review = generate_pr_review(prompt)
-        except instructor.exceptions.InstructorRetryException as e:
-            print("Failed to generate PR review due to validation errors")
-            print(f"Error details: {e}")
-            return {"status": "error", "pr_number": PR_NUMBER, "message": "Failed to generate valid PR review", "details": str(e)}
+        review = generate_pr_review(prompt)
 
         with Halo(text='Validating review', spinner='dots') as spinner:
             if validate_review(review, 'schema/score-card.schema.json'):
