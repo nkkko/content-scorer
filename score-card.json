@@ -20,6 +20,25 @@
             }
         },
         {
+            "name": "Formatting",
+            "explanation": "Is the text well-formatted with bullet points, headings, and white space to enhance readability?",
+            "category": "Structure",
+            "score": {
+              "Excellent": {
+                "value": 5,
+                "description": "Text is exceptionally well-formatted for readability. Consistent use of headings, bullet points, white space, and other elements to create a clear and visually appealing structure."
+              },
+              "Some_issues": {
+                "value": 3,
+                "description": "Formatting is inconsistent or cluttered. Overuse or underuse of bullet points, headings, or white space, making the text somewhat difficult to read."
+              },
+              "Unacceptable": {
+                "value": 1,
+                "description": "Poor formatting significantly hinders readability. Lack of headings, dense paragraphs, and inconsistent use of visual elements make the text unappealing and difficult to process."
+              }
+            }
+          },
+        {
             "name": "Flow",
             "explanation": "Flow: is there a logical flow between sentences and paragraphs?",
             "category": "Structure",
@@ -181,7 +200,7 @@
             "score": {
                 "Excellent": {
                     "value": 5,
-                    "description": "Content seamlessly integrates Daytona context, including running code samples in Daytona workspaces and showcasing relevant Daytona features."
+                    "description": "Content seamlessly integrates Daytona context, including running code samples in Daytona workspaces and showcasing relevant Daytona features such as running daytona commands in the CLI (shell) like: daytona create OR daytona code. Content is r“eferencing Daytona's use cases and benefits."
                 },
                 "Some_issues": {
                     "value": 3,
@@ -252,20 +271,20 @@
         },
         {
             "name": "Credibility",
-            "explanation": "Credibility: is the evidence used to support the argument(s) relevant and accurate?",
+            "explanation": "Is the evidence used to support the argument(s) relevant, accurate, and trustworthy? Does it demonstrate E-E-A-T (Expertise, Experience, Authoritativeness, Trustworthiness)?",
             "category": "Writing Quality",
             "score": {
                 "Excellent": {
                     "value": 5,
-                    "description": "Argument is clearly supported by accurate evidence. Correctly frames Daytona and its features."
+                    "description": "The argument is clearly supported by accurate, relevant, and trustworthy evidence from authoritative sources. Strong E-E-A-T signals are present."
                 },
                 "Some_issues": {
-                    "value": 3,
-                    "description": "Some details to support argument, but not fully elaborated upon or sufficiently specific. Some irrelevant information."
+                "value": 3,
+                "description": "Some details support the argument, but they are not fully elaborated upon or sufficiently specific. Some irrelevant information. Moderate E-E-A-T."
                 },
                 "Unacceptable": {
-                    "value": 1,
-                    "description": "Little to no evidence to support core arguments; many factual inaccuracies."
+                "value": 1,
+                "description": "Little to no evidence supports core arguments; many factual inaccuracies. The piece lacks credibility and trustworthiness. Low E-E-A-T."
                 }
             }
         },
